@@ -7,7 +7,7 @@
     "start-web": "bunx rork start -p vep9anbk6huqelg0fppmq --web --tunnel",
     "start-web-dev": "DEBUG=expo* bunx rork start -p vep9anbk6huqelg0fppmq --web --tunnel",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint . --ext .ts,.tsx --max-warnings=0 --report-unused-disable-directives",
+    "lint": "eslint 'src/**/*.{ts,tsx}' 'app/**/*.{ts,tsx}' 'components/**/*.{ts,tsx}' 'hooks/**/*.{ts,tsx}' 'lib/**/*.{ts,tsx}' 'features/**/*.{ts,tsx}' 'modules/**/*.{ts,tsx}' 'backend/**/*.{ts,tsx}' '__tests__/**/*.{ts,tsx}' 'tests/**/*.{ts,tsx}' --max-warnings=0 --report-unused-disable-directives",
     "format:check": "prettier . --check",
     "format:fix": "prettier . --write",
     "test": "jest",
