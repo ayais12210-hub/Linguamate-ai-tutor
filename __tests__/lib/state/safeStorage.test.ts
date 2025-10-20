@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { safeStorage, safeGetItem, safeSetItem } from '@/lib/state/safeStorage';
 import { z } from 'zod';
+
+import { safeStorage, safeGetItem, safeSetItem } from '@/lib/state/safeStorage';
 
 // Mock AsyncStorage
 jest.mock('@react-native-async-storage/async-storage', () => ({

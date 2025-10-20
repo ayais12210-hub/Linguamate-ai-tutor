@@ -121,3 +121,27 @@ export const getUserFriendlyMessage = (error: AppError): string => {
       return 'Something went wrong—please try again.';
   }
 };
+
+export const toAppError = (error: unknown): AppError => {
+  if (isAppError(error)) {
+    return error;
+  }
+
+  if (error instanceof Error) {
+    return {
+      code: 'UnknownError',
+      message: error.message,
+      cause: error,
+      retryable: false,
+      timestamp: Date.now(),
+    };
+  }
+
+  return {
+    code: 'UnknownError',
+    message: String(error),
+    cause: error,
+    retryable: false,
+    timestamp: Date.now(),
+  };
+};

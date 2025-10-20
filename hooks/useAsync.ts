@@ -12,7 +12,7 @@ export interface AsyncState<T> {
 export function useAsync<T>(options?: { autoResetMs?: number }) {
   const [state, setState] = useState<AsyncState<T>>({ status: 'idle' });
   const abortRef = useRef<AbortController | null>(null);
-  const resetTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const resetTimeoutRef = useRef<number | null>(null);
 
   const scheduleAutoReset = useCallback(() => {
     if (!options?.autoResetMs) return;

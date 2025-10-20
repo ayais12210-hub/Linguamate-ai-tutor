@@ -1,9 +1,9 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react-native';
-import ErrorBoundary from '@/components/ErrorBoundary';
-
-// Component that throws an error
 import { View, Text, TouchableOpacity } from 'react-native';
+
+import { render, screen, fireEvent } from '@testing-library/react-native';
+
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 // Component that throws an error
 const ThrowError = ({ shouldThrow }: { shouldThrow: boolean }) => {
@@ -42,7 +42,7 @@ describe('ErrorBoundary', () => {
 
   it('should render fallback when there is an error', () => {
     render(
-      <ErrorBoundary fallback={<div testID="error-fallback">Error occurred</div>}>
+      <ErrorBoundary fallback={({ error }) => <View testID="error-fallback"><Text>Error occurred: {error.message}</Text></View>}>
         <ThrowError shouldThrow={true} />
       </ErrorBoundary>
     );

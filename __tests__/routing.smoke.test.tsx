@@ -1,13 +1,14 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react-native';
+import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { View } from 'react-native';
+
+import { render, screen } from '@testing-library/react-native';
 
 // Mock the main app screens
-const MockHomeScreen = () => <View testID="home-screen">Home Screen</View>;
-const MockLearnScreen = () => <View testID="learn-screen">Learn Screen</View>;
-const MockProfileScreen = () => <View testID="profile-screen">Profile Screen</View>;
+const MockHomeScreen = () => <View testID="home-screen"><Text>Home Screen</Text></View>;
+const MockLearnScreen = () => <View testID="learn-screen"><Text>Learn Screen</Text></View>;
+const MockProfileScreen = () => <View testID="profile-screen"><Text>Profile Screen</Text></View>;
 
 const Stack = createNativeStackNavigator();
 

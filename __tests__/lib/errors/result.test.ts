@@ -1,5 +1,5 @@
-import { ok, err, isOk, isErr, unwrap, unwrapOr, map, andThen, wrapAsync, wrapSync } from '@/lib/errors/result';
 import { createAppError } from '@/lib/errors/AppError';
+import { ok, err, isOk, isErr, unwrap, unwrapOr, map, andThen, wrapAsync, wrapSync } from '@/lib/errors/result';
 
 describe('Result helpers', () => {
   describe('ok and err', () => {

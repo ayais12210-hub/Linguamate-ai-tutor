@@ -4,7 +4,23 @@
  */
 
 import { v4 as uuidv4 } from 'uuid';
-import { AsyncLocalStorage } from 'async_hooks';
+
+// Mock AsyncLocalStorage for React Native environment
+class AsyncLocalStorage<T> {
+  run<R>(store: T, callback: () => R): R {
+    return callback();
+  }
+  
+  getStore(): T | undefined {
+    return undefined;
+  }
+  
+  enterWith(store: T): void {}
+  
+  exit<R>(callback: () => R): R {
+    return callback();
+  }
+}
 
 const CORRELATION_ID_KEY = 'x-correlation-id';
 
@@ -68,7 +84,7 @@ export function withCorrelationId<T extends Record<string, any>>(
       const originalMethod = target[prop as keyof T];
       
       if (typeof originalMethod === 'function') {
-        return function(...args: any[]) {
+        return function(this: any, ...args: any[]) {
           const correlationId = correlationIdManager.get();
           const headers = {
             ...baseHeaders,

@@ -1,8 +1,10 @@
 import React from 'react';
-import { renderWithProviders } from '../tests/utils/render';
-import { screen, fireEvent, waitFor } from '@testing-library/react-native';
-import { server } from '../tests/msw/server';
+
 import { http, HttpResponse } from 'msw';
+import { screen, fireEvent, waitFor } from '@testing-library/react-native';
+
+import { server } from '../tests/msw/server';
+import { renderWithProviders } from '../tests/utils/render';
 
 jest.mock('expo-speech', () => ({
   speak: jest.fn(),
