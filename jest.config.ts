@@ -49,7 +49,7 @@ const config: Config = {
     './components/**': { branches: 70, functions: 75, lines: 75, statements: 75 }
   },
   transformIgnorePatterns: [
-    'node_modules/(?!((jest-)?react-native|@react-native|expo(nent)?|@expo(nent)?/.*|@testing-library|react-clone-referenced-element|@react-navigation|@tanstack|msw|@mswjs|until-async|strict-event-emitter)/)'
+    'node_modules/(?!((jest-)?react-native|@react-native|expo(nent)?|@expo(nent)?/.*|@testing-library|react-clone-referenced-element|@react-navigation|@tanstack|msw|@mswjs|until-async|strict-event-emitter|@faker-js)/)'
   ],
   transform: {
     '^.+\\.(ts|tsx)$': ['ts-jest', {
