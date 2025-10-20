@@ -1,10 +1,29 @@
 import 'whatwg-url';
 
-// MSW setup commented out temporarily due to ESM issues
-// import { server } from '../msw/server';
-// beforeAll(() => server.listen({ onUnhandledRequest: 'warn' }));
-// afterEach(() => server.resetHandlers());
-// afterAll(() => server.close());
+// MSW setup - using dynamic import to handle ESM issues
+let server: any = null;
+
+beforeAll(async () => {
+  try {
+    const { server: mswServer } = await import('../msw/server');
+    server = mswServer;
+    server.listen({ onUnhandledRequest: 'warn' });
+  } catch (error) {
+    console.warn('MSW setup failed:', error);
+  }
+});
+
+afterEach(() => {
+  if (server) {
+    server.resetHandlers();
+  }
+});
+
+afterAll(() => {
+  if (server) {
+    server.close();
+  }
+});
 
 // Set __DEV__ global for React Native (already declared by React Native types)
 (global as any).__DEV__ = true;

@@ -83,7 +83,6 @@ jobs:
           VALIDATE_DRONE: true
           VALIDATE_GITEA: true
           VALIDATE_GITLAB: true
-          VALIDATE_JENKINS: true
           VALIDATE_TEAMCITY: true
           VALIDATE_WERKER: true
           VALIDATE_WOODPECKER: true

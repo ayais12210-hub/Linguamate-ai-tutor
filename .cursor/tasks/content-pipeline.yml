@@ -7,15 +7,15 @@ tasks:
       mcp:ingest.ingest_from_index --index_url "https://www.aljazeera.com/latest/" --selector "a.u-clickable-card__link" --language "en" --max_links 4 > .tmp_aj.json
       mkdir -p content/news
       python - <<'PY'
-import json, time, os
-for f in [".tmp_bbc.json",".tmp_aj.json"]:
-    d = json.load(open(f))
-    for item in d.get("lessons",[]):
-        slug = item["id"]
-        p = f"content/news/{int(time.time())}_{slug}.json"
-        with open(p,"w",encoding="utf-8") as w: json.dump(item,w,ensure_ascii=False,indent=2)
-        print("WROTE", p)
-PY
+      import json, time, os
+      for f in [".tmp_bbc.json",".tmp_aj.json"]:
+          d = json.load(open(f))
+          for item in d.get("lessons",[]):
+              slug = item["id"]
+              p = f"content/news/{int(time.time())}_{slug}.json"
+              with open(p,"w",encoding="utf-8") as w: json.dump(item,w,ensure_ascii=False,indent=2)
+              print("WROTE", p)
+      PY
 
   - name: Commit & PR
     run: |

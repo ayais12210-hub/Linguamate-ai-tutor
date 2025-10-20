@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Platform } from 'react-native';
+import { levenshteinDistance } from '@/modules/dialogue/logic/normalization';
 
 /**
  * Speech-to-Text Hook
@@ -178,20 +179,3 @@ export function calculateSpeechAccuracy(expected: string, actual: string): numbe
   return Math.max(0, similarity);
 }
 
-import { levenshteinDistance } from '@/modules/dialogue/logic/normalization';
-
-export function calculateSpeechAccuracy(expected: string, actual: string): number {
-  const normalizedExpected = expected.toLowerCase().trim();
-  const normalizedActual = actual.toLowerCase().trim();
-
-  if (normalizedExpected === normalizedActual) {
-    return 1.0;
-  }
-
-  // Simple Levenshtein distance-based similarity
-  const distance = levenshteinDistance(normalizedExpected, normalizedActual);
-  const maxLength = Math.max(normalizedExpected.length, normalizedActual.length);
-  const similarity = 1 - distance / maxLength;
-
-  return Math.max(0, similarity);
-}

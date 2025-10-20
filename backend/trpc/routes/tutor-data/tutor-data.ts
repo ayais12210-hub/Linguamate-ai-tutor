@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "../create-context";
+import { createTRPCRouter, publicProcedure } from "../../create-context";
 import { tutorDataFetcher, TutorDataFetchError, TutorDataValidationError } from "@/lib/services/tutor-data-fetcher";
 
 // Input validation schemas

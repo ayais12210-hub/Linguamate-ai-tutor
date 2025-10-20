@@ -244,6 +244,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
-// Import React for hooks
-import React from 'react';
