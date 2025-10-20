@@ -55,7 +55,7 @@ addReviewers:
       - "ayais12210-hub"
 
 # Default reviewers for all PRs
-addReviewers:
+defaultReviewers:
   - reviewers:
       - "ayais12210-hub"
     assignees:

@@ -51,6 +51,9 @@ export const asAppError = (e: unknown, fallback: AppErrorCode = 'UnknownError'):
   return createAppError(fallback, 'Unexpected error', { cause: e });
 };
 
+// Alias for compatibility
+export const toAppError = asAppError;
+
 export const isRetryableError = (error: AppError): boolean => {
   return error.retryable ?? false;
 };
