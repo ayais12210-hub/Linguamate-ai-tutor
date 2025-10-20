@@ -1,5 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { trpc } from "@/lib/trpc";
+import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
+import type { AppRouter } from "@/backend/trpc/app-router";
 import { TutorData } from "@/lib/services/tutor-data-fetcher";
 
 // Query keys for React Query
@@ -23,7 +25,8 @@ export function useFetchTutorData() {
         validate?: boolean;
       }
     }) => {
-      return trpc.tutorData.fetch.mutate({ url, options });
+      // Use type assertion to avoid strict inference issues on the app side
+      return (trpc as any).tutorData.fetch.mutate({ url, options }) as Promise<inferRouterOutputs<AppRouter>["tutorData"]["fetch"]>;
     },
     onSuccess: (data, variables) => {
       // Invalidate related queries
@@ -56,7 +59,7 @@ export function useFetchMultipleTutorData() {
         concurrency?: number;
       }
     }) => {
-      return trpc.tutorData.fetchMultiple.mutate({ urls, options });
+      return (trpc as any).tutorData.fetchMultiple.mutate({ urls, options }) as Promise<inferRouterOutputs<AppRouter>["tutorData"]["fetchMultiple"]>;
     },
     onSuccess: (data, variables) => {
       // Invalidate related queries
@@ -85,7 +88,7 @@ export function useClearTutorDataCache() {
   
   return useMutation({
     mutationFn: async (url?: string) => {
-      return trpc.tutorData.clearCache.mutate({ url });
+      return (trpc as any).tutorData.clearCache.mutate({ url }) as Promise<inferRouterOutputs<AppRouter>["tutorData"]["clearCache"]>;
     },
     onSuccess: () => {
       // Invalidate all tutor data queries
@@ -101,7 +104,7 @@ export function useClearTutorDataCache() {
 export function useTutorDataCacheStats() {
   return useQuery({
     queryKey: tutorDataKeys.cacheStats(),
-    queryFn: () => trpc.tutorData.getCacheStats.query(),
+    queryFn: () => (trpc as any).tutorData.getCacheStats.query() as Promise<inferRouterOutputs<AppRouter>["tutorData"]["getCacheStats"]>,
     staleTime: 30 * 1000, // 30 seconds
     refetchInterval: 60 * 1000, // Refetch every minute
   });

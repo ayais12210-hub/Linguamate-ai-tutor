@@ -43,10 +43,11 @@ export async function initializeSecureStorage(): Promise<void> {
       SecureKeyManager.getEncryptionKey('secure'),
     ]);
 
-    // Create storage instances with secure keys
-    storage.setEncryptionKey(defaultKey);
-    cacheStorage.setEncryptionKey(cacheKey);
-    secureStorage.setEncryptionKey(secureKey);
+    // Recreate storage instances with secure keys (MMKV doesn't support changing key at runtime)
+    // Note: In React Native, encryption key is passed at construction time
+    (storage as any) = new MMKV({ id: 'linguamate-default', encryptionKey: defaultKey });
+    (cacheStorage as any) = new MMKV({ id: 'linguamate-cache', encryptionKey: cacheKey });
+    (secureStorage as any) = new MMKV({ id: 'linguamate-secure', encryptionKey: secureKey });
 
     isInitialized = true;
     console.log('[MMKV Storage] Secure storage initialized successfully');
@@ -58,10 +59,10 @@ export async function initializeSecureStorage(): Promise<void> {
       console.warn('[MMKV Storage] Using development fallback keys - NOT SECURE!');
       console.warn('[MMKV Storage] These keys should never be used in production!');
       
-      // Use development fallback keys
-      storage.setEncryptionKey('dev-fallback-default-key');
-      cacheStorage.setEncryptionKey('dev-fallback-cache-key');
-      secureStorage.setEncryptionKey('dev-fallback-secure-key');
+      // Recreate storage instances with development fallback keys
+      (storage as any) = new MMKV({ id: 'linguamate-default', encryptionKey: 'dev-fallback-default-key' });
+      (cacheStorage as any) = new MMKV({ id: 'linguamate-cache', encryptionKey: 'dev-fallback-cache-key' });
+      (secureStorage as any) = new MMKV({ id: 'linguamate-secure', encryptionKey: 'dev-fallback-secure-key' });
       
       isInitialized = true;
     } else {

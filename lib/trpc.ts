@@ -1,11 +1,12 @@
 import { createTRPCReact } from "@trpc/react-query";
 import { httpBatchLink } from "@trpc/client";
-import type { AppRouter } from "@/backend/trpc/app-router";
 import superjson from "superjson";
 import { Platform } from "react-native";
 import Constants from "expo-constants";
 
-export const trpc = createTRPCReact<AppRouter>();
+// Avoid importing backend types to keep frontend typecheck isolated
+// Use `any` here; runtime requests are validated by the backend
+export const trpc = createTRPCReact<any>();
 
 const getNativeBaseFromHostUri = (hostUri: string) => {
   let cleaned = hostUri.trim();

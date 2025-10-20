@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { AppError, toAppError } from '@/lib/errors';
+import type { AppError } from '@/lib/errors/AppError';
+import { asAppError } from '@/lib/errors/AppError';
 
 export type AsyncStatus = 'idle' | 'loading' | 'success' | 'error';
 
@@ -12,7 +13,7 @@ export interface AsyncState<T> {
 export function useAsync<T>(options?: { autoResetMs?: number }) {
   const [state, setState] = useState<AsyncState<T>>({ status: 'idle' });
   const abortRef = useRef<AbortController | null>(null);
-  const resetTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const resetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const scheduleAutoReset = useCallback(() => {
     if (!options?.autoResetMs) return;
@@ -37,7 +38,7 @@ export function useAsync<T>(options?: { autoResetMs?: number }) {
         scheduleAutoReset();
         return result;
       } catch (e) {
-        const appErr = toAppError(e);
+        const appErr = asAppError(e);
         setState({ status: 'error', error: appErr });
         scheduleAutoReset();
         return undefined;
@@ -50,7 +51,7 @@ export function useAsync<T>(options?: { autoResetMs?: number }) {
 
   const reset = useCallback(() => {
     if (resetTimeoutRef.current) {
-      clearTimeout(resetTimeoutRef.current);
+      clearTimeout(resetTimeoutRef.current as unknown as number);
       resetTimeoutRef.current = null;
     }
     setState({ status: 'idle' });
@@ -60,7 +61,7 @@ export function useAsync<T>(options?: { autoResetMs?: number }) {
   useEffect(() => {
     return () => {
       if (resetTimeoutRef.current) {
-        clearTimeout(resetTimeoutRef.current);
+        clearTimeout(resetTimeoutRef.current as unknown as number);
         resetTimeoutRef.current = null;
       }
     };

@@ -37,15 +37,19 @@ export default function TutorDataFetcher({
 
   const handleSingleFetch = async () => {
     try {
-      const result = await fetchTutorData({ url });
-      if (result?.success && result.data) {
-        onDataFetched?.(result.data);
-        Alert.alert('Success', 'Tutor data fetched successfully!');
-      } else {
-        const error = new Error(result?.error?.message || 'Failed to fetch data');
-        onError?.(error);
-        Alert.alert('Error', error.message);
-      }
+      fetchTutorData({ url });
+      // Use hook state after a short delay to allow mutation to complete
+      setTimeout(() => {
+        const { data } = useTutorDataForUrl(url);
+        if (data) {
+          onDataFetched?.(data);
+          Alert.alert('Success', 'Tutor data fetched successfully!');
+        } else {
+          const error = new Error('Failed to fetch data');
+          onError?.(error);
+          Alert.alert('Error', error.message);
+        }
+      }, 50);
     } catch (error) {
       const err = error instanceof Error ? error : new Error('Unknown error');
       onError?.(err);

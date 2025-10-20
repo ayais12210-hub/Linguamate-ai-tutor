@@ -1,5 +1,10 @@
 import { Platform } from 'react-native';
-import * as SecureStore from 'expo-secure-store';
+// expo-secure-store might not be available in all environments; provide a soft import
+let SecureStore: any;
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  SecureStore = require('expo-secure-store');
+} catch {}
 import CryptoJS from 'crypto-js';
 import { storage } from './storage';
 
@@ -164,10 +169,11 @@ export class SecureKeyManager {
         // On web, use localStorage as fallback (not secure, but better than hardcoded)
         const key = localStorage.getItem(keyName);
         return key;
-      } else {
+      } else if (SecureStore?.getItemAsync) {
         // Use platform secure storage
         return await SecureStore.getItemAsync(keyName);
       }
+      return null;
     } catch (error) {
       console.error(`[SecureKeyManager] Failed to get secure key ${keyName}:`, error);
       return null;
@@ -182,7 +188,7 @@ export class SecureKeyManager {
       if (Platform.OS === 'web') {
         // On web, use localStorage as fallback
         localStorage.setItem(keyName, key);
-      } else {
+      } else if (SecureStore?.setItemAsync) {
         // Use platform secure storage
         await SecureStore.setItemAsync(keyName, key);
       }

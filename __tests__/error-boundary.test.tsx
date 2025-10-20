@@ -41,8 +41,13 @@ describe('ErrorBoundary', () => {
   });
 
   it('should render fallback when there is an error', () => {
+    const Fallback = ({ retry }: { error: any; retry: () => void }) => (
+      <View testID="error-fallback">
+        <TouchableOpacity onPress={retry}><Text>Retry</Text></TouchableOpacity>
+      </View>
+    );
     render(
-      <ErrorBoundary fallback={<div testID="error-fallback">Error occurred</div>}>
+      <ErrorBoundary fallback={Fallback}>
         <ThrowError shouldThrow={true} />
       </ErrorBoundary>
     );

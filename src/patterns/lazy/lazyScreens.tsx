@@ -26,53 +26,53 @@ export function withLoading<T extends object>(
 }
 
 // Lazy screen components
-export const PronunciationLab = lazy(() => 
+export const PronunciationLab = lazy(() =>
   import('../../features/pronunciation/PronunciationLab').catch(() => ({
     default: () => (
       <View style={styles.errorContainer}>
         <Text style={styles.errorText}>Failed to load Pronunciation Lab</Text>
       </View>
-    )
+    ),
   }))
 );
 
-export const OfflinePackManager = lazy(() => 
+export const OfflinePackManager = lazy(() =>
   import('../../features/offline/OfflinePackManager').catch(() => ({
     default: () => (
       <View style={styles.errorContainer}>
         <Text style={styles.errorText}>Failed to load Offline Pack Manager</Text>
       </View>
-    )
+    ),
   }))
 );
 
-export const AdvancedAnalytics = lazy(() => 
+export const AdvancedAnalytics = lazy(() =>
   import('../../features/analytics/AdvancedAnalytics').catch(() => ({
     default: () => (
       <View style={styles.errorContainer}>
         <Text style={styles.errorText}>Failed to load Advanced Analytics</Text>
       </View>
-    )
+    ),
   }))
 );
 
-export const LanguagePackDownloader = lazy(() => 
+export const LanguagePackDownloader = lazy(() =>
   import('../../features/downloads/LanguagePackDownloader').catch(() => ({
     default: () => (
       <View style={styles.errorContainer}>
         <Text style={styles.errorText}>Failed to load Language Pack Downloader</Text>
       </View>
-    )
+    ),
   }))
 );
 
-export const SpeechRecognitionEngine = lazy(() => 
+export const SpeechRecognitionEngine = lazy(() =>
   import('../../features/speech/SpeechRecognitionEngine').catch(() => ({
     default: () => (
       <View style={styles.errorContainer}>
         <Text style={styles.errorText}>Failed to load Speech Recognition Engine</Text>
       </View>
-    )
+    ),
   }))
 );
 
@@ -90,18 +90,20 @@ export class ComponentPreloader {
       return this.preloadPromises.get(componentName);
     }
 
-    const promise = importFn().then(module => {
-      this.preloadedComponents.add(componentName);
-      this.preloadPromises.delete(componentName);
-      return module;
-    }).catch(error => {
-      console.warn(`Failed to preload ${componentName}:`, error);
-      this.preloadPromises.delete(componentName);
-      throw error;
-    });
+    const promise = importFn()
+      .then((module) => {
+        this.preloadedComponents.add(componentName);
+        this.preloadPromises.delete(componentName);
+        return module;
+      })
+      .catch((error) => {
+        console.warn(`Failed to preload ${componentName}:`, error);
+        this.preloadPromises.delete(componentName);
+        throw error;
+      });
 
     this.preloadPromises.set(componentName, promise);
-    return promise;
+    return promise as unknown as Promise<void>;
   }
 
   static isPreloaded(componentName: string): boolean {
@@ -139,13 +141,13 @@ export function useLazyComponent<T extends object>(
     let isMounted = true;
 
     importFn()
-      .then(module => {
+      .then((module) => {
         if (isMounted) {
           setComponent(() => module.default);
           setLoading(false);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         if (isMounted) {
           setError(err);
           setLoading(false);
@@ -199,17 +201,15 @@ export function useBackgroundPreloading() {
 }
 
 // Lazy screen wrapper with error boundary
-export function LazyScreenWrapper({ 
-  children, 
-  fallback 
-}: { 
-  children: ReactNode; 
+export function LazyScreenWrapper({
+  children,
+  fallback,
+}: {
+  children: ReactNode;
   fallback?: ReactNode;
 }) {
   return (
-    <Suspense fallback={fallback || <LoadingView />}>
-      {children}
-    </Suspense>
+    <Suspense fallback={fallback || <LoadingView />}> {children} </Suspense>
   );
 }
 
@@ -244,6 +244,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
-// Import React for hooks
-import React from 'react';

@@ -75,7 +75,10 @@ export function useSpeech() {
           setIsPaused(false);
           currentUtteranceRef.current = null;
           console.error('[useSpeech] Error:', error);
-          options?.onError?.(new Error(error.error));
+          const err = (error && typeof error === 'object' && 'error' in error)
+            ? new Error(String((error as any).error))
+            : (error instanceof Error ? error : new Error(String(error)));
+          options?.onError?.(err);
         },
       };
 

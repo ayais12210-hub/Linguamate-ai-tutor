@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Platform } from 'react-native';
+import { levenshteinDistance } from '@/modules/dialogue/logic/normalization';
 
 /**
  * Speech-to-Text Hook
@@ -84,7 +85,7 @@ export function useSpeechRecognition() {
       console.log('[useSpeechRecognition] Started with options:', options);
       
       // Mock implementation - remove this in production
-      if (__DEV__) {
+      if (typeof __DEV__ !== 'undefined' && __DEV__) {
         console.warn('[useSpeechRecognition] Using mock implementation. Install expo-speech-recognition or @react-native-voice/voice for actual functionality.');
       }
     } catch (err) {
@@ -162,24 +163,6 @@ export function useSpeechRecognition() {
  * Calculate similarity between expected and actual speech
  * Useful for pronunciation scoring
  */
-export function calculateSpeechAccuracy(expected: string, actual: string): number {
-  const normalizedExpected = expected.toLowerCase().trim();
-  const normalizedActual = actual.toLowerCase().trim();
-
-  if (normalizedExpected === normalizedActual) {
-    return 1.0;
-  }
-
-  // Simple Levenshtein distance-based similarity
-  const distance = levenshteinDistance(normalizedExpected, normalizedActual);
-  const maxLength = Math.max(normalizedExpected.length, normalizedActual.length);
-  const similarity = 1 - distance / maxLength;
-
-  return Math.max(0, similarity);
-}
-
-import { levenshteinDistance } from '@/modules/dialogue/logic/normalization';
-
 export function calculateSpeechAccuracy(expected: string, actual: string): number {
   const normalizedExpected = expected.toLowerCase().trim();
   const normalizedActual = actual.toLowerCase().trim();

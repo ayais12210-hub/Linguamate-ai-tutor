@@ -35,9 +35,9 @@ import { Platform } from 'react-native';
 // Configure notification behavior
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
+    shouldShowAlert: true as const,
+    shouldPlaySound: true as const,
+    shouldSetBadge: true as const,
   }),
 });
 
@@ -125,7 +125,7 @@ export function useNotifications() {
         title: options.title,
         body: options.body,
         data: options.data || {},
-        sound: options.sound !== false,
+        sound: options.sound !== false ? true : undefined,
       },
       trigger,
     });
@@ -145,11 +145,9 @@ export function useNotifications() {
         data: options.data,
         sound: options.sound,
       },
-      {
-        hour: options.hour,
-        minute: options.minute,
-        repeats: true,
-      }
+      Notifications.scheduleNotificationAsync
+        ? ({ hour: options.hour, minute: options.minute, repeats: true } as Notifications.DailyTriggerInput)
+        : (null as unknown as Notifications.NotificationTriggerInput)
     );
   };
 
@@ -179,9 +177,7 @@ export function useNotifications() {
         body: `Your ${lessonName} lesson is waiting for you.`,
         data: { type: 'lesson', screen: 'lessons' },
       },
-      {
-        seconds: delayMinutes * 60,
-      }
+      ({ seconds: delayMinutes * 60 } as Notifications.TimeIntervalTriggerInput)
     );
   };
 
@@ -189,7 +185,7 @@ export function useNotifications() {
    * Send immediate notification
    */
   const sendImmediateNotification = async (options: NotificationOptions): Promise<string> => {
-    return scheduleNotification(options, null);
+    return scheduleNotification(options, { seconds: 1 } as Notifications.TimeIntervalTriggerInput);
   };
 
   /**
